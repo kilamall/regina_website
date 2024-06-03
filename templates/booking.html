@@ -1,0 +1,126 @@
+<!-- booking.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking - Bueno Beauty Boutique</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <style>
+        #booking-form {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Gallery</a></li>
+                <li><a href="{{ url_for('booking') }}">Booking</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Schedule an Appointment</h2>
+            <input type="text" id="datepicker" placeholder="Select a date">
+            <div id="booking-form">
+                <form action="{{ url_for('booking') }}" method="post">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="category">Category:</label>
+                    <select id="category" name="category" onchange="updateServices()">
+                        <option value="">Select a category</option>
+                        <option value="Brows">Brows</option>
+                        <option value="Lash">Lash</option>
+                        <option value="Wax">Wax</option>
+                        <option value="Makeup">Makeup</option>
+                    </select>
+                    <label for="service">Service:</label>
+                    <select id="service" name="service" onchange="serviceChanged()">
+                        <option value="">Select a service</option>
+                    </select>
+                    <label for="time">Available Times:</label>
+                    <select id="time" name="time" required></select>
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" required></textarea>
+                    <button type="submit">Book Appointment</button>
+                </form>
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Bueno Beauty Boutique | Contact us at (650) 766-3918</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var picker = new Pikaday({
+                field: document.getElementById('datepicker'),
+                onSelect: function(date) {
+                    console.log('Date selected:', date.toISOString().split('T')[0]); // Debug
+                    document.getElementById('booking-form').style.display = 'block';
+                    updateAvailableTimes(date.toISOString().split('T')[0]);
+                }
+            });
+        });
+
+        function updateServices() {
+            const category = document.getElementById('category').value;
+            fetch('/get-categories')
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Categories fetched:', data); // Debug
+                    const serviceSelect = document.getElementById('service');
+                    serviceSelect.innerHTML = '<option value="">Select a service</option>';  // Clear previous options
+                    if (data[category]) {
+                        data[category].forEach(service => {
+                            const option = document.createElement('option');
+                            option.value = service;
+                            option.textContent = service;
+                            serviceSelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching services:', error));
+        }
+
+        function serviceChanged() {
+            const dateStr = document.getElementById('datepicker').value;
+            if (dateStr) {
+                updateAvailableTimes(dateStr);
+            }
+        }
+
+        function updateAvailableTimes(dateStr) {
+            const service = document.getElementById('service').value;
+            if (!service) return;
+
+            fetch(`/get-available-times?date=${encodeURIComponent(dateStr)}&service=${encodeURIComponent(service)}`)
+                .then(response => response.json())
+                .then(times => {
+                    console.log('Available times fetched:', times); // Debug
+                    const timeSelect = document.getElementById('time');
+                    timeSelect.innerHTML = '';  // Clear previous options
+                    if (times.length === 0) {
+                        timeSelect.innerHTML = '<option>No available times</option>';
+                    } else {
+                        times.forEach(time => {
+                            const option = document.createElement('option');
+                            option.value = time;
+                            option.textContent = time;
+                            timeSelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching available times:', error));
+        }
+    </script>
+</body>
+</html>

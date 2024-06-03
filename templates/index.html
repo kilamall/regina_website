@@ -1,0 +1,62 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bueno Beauty Boutique</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Bueno Beauty Boutique</h1>
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Gallery</a></li>
+                <li><a href="{{ url_for('booking') }}">Booking</a></li>
+            </ul>
+        </nav>
+    </header>
+    <h2> Together we can Leave the world a little more Bueno!</h2>
+    <main>
+        <section>
+            <h3>Beauty Bot</h3>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <label for="photo">Upload a photo:</label>
+                <input type="file" id="photo" name="photo" accept="image/*" required>
+                <button type="submit">Get Recommendations</button>
+            </form>
+        </section>
+        <section>
+            <h3>Book Now</h3>
+            <a href="{{ url_for('booking') }}" class="button">Book Now</a>
+        </section>
+        <section>
+            <h3>Future Features</h3>
+            <div id="instagram-embed">
+                <!-- Instagram embed code will go here in the future -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Bueno Beauty Boutique | Contact us at (650) 766-3918</p>
+    </footer>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById('nav-menu');
+            if (menu.className === '') {
+                menu.className = 'responsive';
+            } else {
+                menu.className = '';
+            }
+        }
+    </script>
+</body>
+</html>

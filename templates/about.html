@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Bueno Beauty Boutique</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>About Me</h1>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Gallery</a></li>
+                <li><a href="{{ url_for('booking') }}">Booking</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>About Me</h2>
+            <p>Hi, I'm Regina, a Licensed Esthetician in the Bay Area. Inspired by my grandma’s red lips and my mom’s skincare rituals, I fell in love with beauty early on.
+
+                I studied Economics at San Diego State, which gave me a knack for market trends. During COVID, I perfected makeup looks for the fun of it and launched Queen Bueno Beauty on Instagram, experimenting with my roommates as models.
+                
+                Working at Ulta Beauty as a brow specialist and makeup artist deepened my product knowledge and customer service skills. It was a hard choice then but now I blend my economic insights with my beauty expertise.
+                
+                Let's find the intersection between beauty and happiness. Join me to discover the art of self-care and unlock your inner beauty!</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Bueno Beauty Boutique | Contact us at (123) 456-7890</p>    </footer>
+</body>
+</html> 

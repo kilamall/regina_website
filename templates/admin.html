@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Available Times</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+</head>
+<body>
+    <header>
+        <h1>Admin - Manage Available Times</h1>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Gallery</a></li>
+                <li><a href="{{ url_for('booking') }}">Booking</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>Add Available Times</h2>
+            <form id="available-times-form">
+                <label for="date">Date:</label>
+                <input type="text" id="date" placeholder="Select a date" required>
+                <label for="service">Service:</label>
+                <select id="service" required>
+                    <option value="">Select a service</option>
+                    <option value="All Services">All Services</option>
+                </select>
+                <label for="times">Times (comma separated):</label>
+                <input type="text" id="times" placeholder="Enter available times" required>
+                <button type="submit">Add Times</button>
+            </form>
+        </section>
+        <section>
+            <h2>Current Available Times</h2>
+            <div id="available-times-list">
+                <!-- Current available times will be listed here -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Bueno Beauty Boutique</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var picker = new Pikaday({
+                field: document.getElementById('date')
+            });
+
+            fetch('/get-categories')
+                .then(response => response.json())
+                .then(data => {
+                    const serviceSelect = document.getElementById('service');
+                    Object.keys(data).forEach(category => {
+                        data[category].forEach(service => {
+                            const option = document.createElement('option');
+                            option.value = service;
+                            option.textContent = service;
+                            serviceSelect.appendChild(option);
+                        });
+                    });
+                })
+                .catch(error => console.error('Error fetching services:', error));
+
+            document.getElementById('available-times-form').addEventListener('submit', function(event) {
+                event.preventDefault();
+                const date = document.getElementById('date').value;
+                const service = document.getElementById('service').value;
+                const times = document.getElementById('times').value.split(',').map(time => time.trim());
+
+                fetch('/admin/add-available-times', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ date, service, times })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Available times added:', data); // Debug
+                    updateAvailableTimesList();
+                })
+                .catch(error => console.error('Error adding available times:', error));
+            });
+
+            function updateAvailableTimesList() {
+                fetch('/admin/get-available-times')
+                    .then(response => response.json())
+                    .then(data => {
+                        const list = document.getElementById('available-times-list');
+                        list.innerHTML = '';
+                        Object.keys(data).forEach(date => {
+                            const dateDiv = document.createElement('div');
+                            dateDiv.innerHTML = `<strong>${date}</strong>`;
+                            const ul = document.createElement('ul');
+                            Object.keys(data[date]).forEach(service => {
+                                const li = document.createElement('li');
+                                li.textContent = `${service}: ${data[date][service].join(', ')}`;
+                                ul.appendChild(li);
+                            });
+                            dateDiv.appendChild(ul);
+                            list.appendChild(dateDiv);
+                        });
+                    })
+                    .catch(error => console.error('Error fetching available times:', error));
+            }
+
+            // Initial load of available times
+            updateAvailableTimesList();
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testimonials & Gallery - Bueno Beauty Boutique</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Testimonials & Gallery</h1>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Gallery</a></li>
+                <li><a href="{{ url_for('booking') }}">Booking</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section>
+            <h2>What Our Clients Say</h2>
+            <p>"I had an amazing experience at Bueno Beauty Boutique! My skin has never looked better."</p>
+            <p>"Professional and personalized service. Highly recommended!"</p>
+        </section>
+        <section>
+            <h2>Our Work</h2>
+            <div class="slideshow-container">
+                <div class="mySlides fade">
+                  <img src="{{ url_for('static', filename='images/brow_lami_after.JPG') }}" alt="Gallery Image 1">
+                </div>
+                <div class="mySlides fade">
+                    <img src="{{ url_for('static', filename='images/photo2.jpg') }}" alt="Gallery Image 2">
+                </div>
+                <div class="mySlides fade">
+                    <img src="{{ url_for('static', filename='images/photo3.jpg') }}" alt="Gallery Image 3">
+                </div>
+                <!-- Add  images as needed -->
+                <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+                <a class="next" onclick="plusSlides(1)">&#10095;</a>
+            </div>
+            <br>
+            <div style="text-align:center">
+                <span class="dot" onclick="currentSlide(1)"></span>
+                <span class="dot" onclick="currentSlide(2)"></span>
+                <span class="dot" onclick="currentSlide(3)"></span>
+                <!-- Add more dots as needed -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Bueno Beauty Boutique | Contact us at (650) 766-3918</p>    </footer>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
