@@ -3,116 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Manage Available Times</title>
+    <title>Admin - Bueno Beauty Bar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
     <header>
-        <h1>Admin - Manage Available Times</h1>
+        <div class="logo">
+            <h1>Bueno Beauty Bar - Admin</h1>
+        </div>
         <nav>
-            <ul id="nav-menu">
+            <ul>
                 <li><a href="{{ url_for('home') }}">Home</a></li>
                 <li><a href="{{ url_for('about') }}">About Me</a></li>
-                <li><a href="{{ url_for('testimonials_gallery') }}">Gallery</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Testimonials & Gallery</a></li>
                 <li><a href="{{ url_for('booking') }}">Booking</a></li>
+                <li><a href="{{ url_for('admin') }}">Admin</a></li>
             </ul>
         </nav>
     </header>
     <main>
-        <section>
-            <h2>Add Available Times</h2>
-            <form id="available-times-form">
-                <label for="date">Date:</label>
-                <input type="text" id="date" placeholder="Select a date" required>
+        <section class="content">
+            <h2>Set Availability</h2>
+            <form action="{{ url_for('admin') }}" method="post">
                 <label for="service">Service:</label>
-                <select id="service" required>
-                    <option value="">Select a service</option>
+                <select id="service" name="service">
                     <option value="All Services">All Services</option>
+                    {% for service in services %}
+                        <option value="{{ service }}">{{ service }}</option>
+                    {% endfor %}
                 </select>
-                <label for="times">Times (comma separated):</label>
-                <input type="text" id="times" placeholder="Enter available times" required>
-                <button type="submit">Add Times</button>
+
+                <label for="date-admin">Date:</label>
+                <input type="text" id="date-admin" name="date" placeholder="Select a date" required>
+
+                <label for="times">Times:</label>
+                <div id="time-picker-container">
+                    <input type="text" class="time-picker" name="times" placeholder="Select time" required>
+                </div>
+                <button type="button" id="add-time">Add Another Time</button>
+                <button type="submit">Set Availability</button>
             </form>
         </section>
-        <section>
-            <h2>Current Available Times</h2>
-            <div id="available-times-list">
-                <!-- Current available times will be listed here -->
-            </div>
+        <section class="content">
+            <h2>Bookings</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client Name</th>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.name }}</td>
+                            <td>{{ booking.service }}</td>
+                            <td>{{ booking.date }}</td>
+                            <td>{{ booking.time }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </section>
     </main>
     <footer>
-        <p>&copy; 2024 Bueno Beauty Boutique</p>
+        <p>&copy; 2024 Bueno Beauty Bar | Contact us at (650) 766-3918</p>
     </footer>
     <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var picker = new Pikaday({
-                field: document.getElementById('date')
-            });
-
-            fetch('/get-categories')
-                .then(response => response.json())
-                .then(data => {
-                    const serviceSelect = document.getElementById('service');
-                    Object.keys(data).forEach(category => {
-                        data[category].forEach(service => {
-                            const option = document.createElement('option');
-                            option.value = service;
-                            option.textContent = service;
-                            serviceSelect.appendChild(option);
-                        });
-                    });
-                })
-                .catch(error => console.error('Error fetching services:', error));
-
-            document.getElementById('available-times-form').addEventListener('submit', function(event) {
-                event.preventDefault();
-                const date = document.getElementById('date').value;
-                const service = document.getElementById('service').value;
-                const times = document.getElementById('times').value.split(',').map(time => time.trim());
-
-                fetch('/admin/add-available-times', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ date, service, times })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Available times added:', data); // Debug
-                    updateAvailableTimesList();
-                })
-                .catch(error => console.error('Error adding available times:', error));
-            });
-
-            function updateAvailableTimesList() {
-                fetch('/admin/get-available-times')
-                    .then(response => response.json())
-                    .then(data => {
-                        const list = document.getElementById('available-times-list');
-                        list.innerHTML = '';
-                        Object.keys(data).forEach(date => {
-                            const dateDiv = document.createElement('div');
-                            dateDiv.innerHTML = `<strong>${date}</strong>`;
-                            const ul = document.createElement('ul');
-                            Object.keys(data[date]).forEach(service => {
-                                const li = document.createElement('li');
-                                li.textContent = `${service}: ${data[date][service].join(', ')}`;
-                                ul.appendChild(li);
-                            });
-                            dateDiv.appendChild(ul);
-                            list.appendChild(dateDiv);
-                        });
-                    })
-                    .catch(error => console.error('Error fetching available times:', error));
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateInputAdmin = document.getElementById('date-admin');
+            if (dateInputAdmin) {
+                new Pikaday({
+                    field: dateInputAdmin,
+                    format: 'YYYY-MM-DD'
+                });
             }
 
-            // Initial load of available times
-            updateAvailableTimesList();
+            const timePickerContainer = document.getElementById('time-picker-container');
+            const addTimeButton = document.getElementById('add-time');
+            if (timePickerContainer && addTimeButton) {
+                addTimeButton.addEventListener('click', () => {
+                    const newTimePicker = document.createElement('input');
+                    newTimePicker.type = 'text';
+                    newTimePicker.className = 'time-picker';
+                    newTimePicker.name = 'times';
+                    newTimePicker.placeholder = 'Select time';
+                    timePickerContainer.appendChild(newTimePicker);
+                    flatpickr(newTimePicker, {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "h:i K", // h:i K format for 12-hour time with AM/PM
+                        time_24hr: false
+                    });
+                });
+
+                flatpickr(".time-picker", {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "h:i K",
+                    time_24hr: false
+                });
+            }
         });
     </script>
 </body>
 </html>
-
