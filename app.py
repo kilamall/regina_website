@@ -24,13 +24,18 @@ def testimonials_gallery():
 @app.route('/booking', methods=['GET', 'POST'])
 def booking():
     if request.method == 'POST':
-        name = request.form['name']
-        email = request.form['email']
-        phone = request.form['phone']
-        service = request.form['service']
-        date = request.form['date']
-        time = request.form['time']
-        message = request.form['message']
+        print(request.form)  # Debugging statement to print form data
+
+        name = request.form.get('name')
+        email = request.form.get('email')
+        phone = request.form.get('phone')
+        service = request.form.get('service')
+        date = request.form.get('date')
+        time = request.form.get('time')
+        message = request.form.get('message')
+
+        if not service:
+            return "Service is missing", 400
 
         conn = get_db_connection()
         cursor = conn.cursor()

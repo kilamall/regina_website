@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Bueno Beauty Bar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Bueno Beauty Bar - Admin</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Testimonials & Gallery</a></li>
+                <li><a href="{{ url_for('booking') }}">Booking</a></li>
+                <li><a href="{{ url_for('admin') }}">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <h2>Set Availability</h2>
+            <form action="{{ url_for('admin') }}" method="post">
+                <label for="service">Service:</label>
+                <select id="service" name="service">
+                    <option value="All Services">All Services</option>
+                    {% for service in services %}
+                        <option value="{{ service }}">{{ service }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="date-admin">Date:</label>
+                <input type="text" id="date-admin" name="date" placeholder="Select a date" required>
+
+                <label for="times">Times:</label>
+                <div id="time-picker-container">
+                    <input type="text" class="time-picker" name="times" placeholder="Select time" required>
+                </div>
+                <button type="button" id="add-time">Add Another Time</button>
+                <button type="submit">Set Availability</button>
+            </form>
+        </section>
+        <section class="content">
+            <h2>Bookings</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client Name</th>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.name }}</td>
+                            <td>{{ booking.service }}</td>
+                            <td>{{ booking.date }}</td>
+                            <td>{{ booking.time }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Bueno Beauty Bar | Contact us at (650) 766-3918</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const dateInputAdmin = document.getElementById('date-admin');
+            if (dateInputAdmin) {
+                new Pikaday({
+                    field: dateInputAdmin,
+                    format: 'YYYY-MM-DD'
+                });
+            }
+
+            const timePickerContainer = document.getElementById('time-picker-container');
+            const addTimeButton = document.getElementById('add-time');
+            if (timePickerContainer && addTimeButton) {
+                addTimeButton.addEventListener('click', () => {
+                    const newTimePicker = document.createElement('input');
+                    newTimePicker.type = 'text';
+                    newTimePicker.className = 'time-picker';
+                    newTimePicker.name = 'times';
+                    newTimePicker.placeholder = 'Select time';
+                    timePickerContainer.appendChild(newTimePicker);
+                    flatpickr(newTimePicker, {
+                        enableTime: true,
+                        noCalendar: true,
+                        dateFormat: "h:i K", // h:i K format for 12-hour time with AM/PM
+                        time_24hr: false
+                    });
+                });
+
+                flatpickr(".time-picker", {
+                    enableTime: true,
+                    noCalendar: true,
+                    dateFormat: "h:i K",
+                    time_24hr: false
+                });
+            }
+        });
+    </script>
+</body>
+</html>
