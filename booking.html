@@ -16,6 +16,9 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s ease;
+            flex: 1 1 30%; /* Adjust flex basis to control the number of items per row */
+            box-sizing: border-box;
+            text-align: center;
         }
 
         .service-item:hover {
@@ -37,11 +40,13 @@
         }
 
         .center-content {
-            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
         .time-widget {
-            display: inline-block;
+            display: block;
             padding: 10px;
             margin: 5px;
             background-color: #f0f0f0;
@@ -56,6 +61,47 @@
 
         .time-widget.selected {
             background-color: #ccc;
+        }
+
+        .time-widgets {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .time-slot-container {
+            display: none;
+            flex-direction: column;
+            margin: 5px 0;
+        }
+
+        .time-slot-widget {
+            display: block;
+            padding: 5px 10px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .time-slot-widget:hover {
+            background-color: #ccc;
+        }
+
+        .time-slot-widget.selected {
+            background-color: #ccc;
+        }
+
+        .more-times {
+            color: #888;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 0.9em;
+        }
+
+        .more-times:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -133,4 +179,3 @@
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
 </body>
 </html>
-

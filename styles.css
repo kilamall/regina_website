@@ -28,13 +28,25 @@ header {
     font-weight: 700;
 }
 
+/* Center Navbar */
+nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 nav ul {
     list-style: none;
     padding: 0;
     margin: 0;
     display: flex;
-    justify-content: center;
     gap: 15px;
+}
+
+nav ul#nav-menu {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
 nav a {
@@ -43,6 +55,7 @@ nav a {
     font-weight: 700;
 }
 
+/* Hamburger Menu */
 .hamburger {
     display: none;
     cursor: pointer;
@@ -55,23 +68,34 @@ nav a {
     margin: 5px;
 }
 
-nav ul.responsive {
-    flex-direction: column;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    width: 100%;
-    background-color: #ff69b4;
-    display: none;
-}
+/* Responsive Navbar */
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
 
-nav ul.responsive a {
-    padding: 10px;
-    border-bottom: 1px solid #fff;
-}
+    nav ul {
+        display: none;
+    }
 
-nav ul.responsive a:last-child {
-    border-bottom: none;
+    nav ul.responsive {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 60px;
+        left: 0;
+        width: 100%;
+        background-color: #ff69b4;
+    }
+
+    nav ul.responsive a {
+        padding: 10px;
+        border-bottom: 1px solid #fff;
+    }
+
+    nav ul.responsive a:last-child {
+        border-bottom: none;
+    }
 }
 
 /* Responsive Styles */
@@ -146,7 +170,7 @@ footer {
 
 .back-button {
     background-color: #ff69b4;
-    color: white;
+    color: rgb(255, 255, 255);
     padding: 10px 20px;
     border: none;
     cursor: pointer;
