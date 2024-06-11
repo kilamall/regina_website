@@ -75,13 +75,6 @@ def admin():
                 for time in time_slots:
                     cursor.execute('INSERT INTO availability (service, date, time) VALUES (?, ?, ?)',
                                    (s['subcategory'], date.strip(), time.strip()))
-        elif service == 'Permanent Jewelry':
-            jewelry_services = ['Bracelet', 'Ring', 'Necklace']
-            for jewelry_service in jewelry_services:
-                cursor.execute('DELETE FROM availability WHERE service = ? AND date = ?', (jewelry_service, date.strip()))
-                for time in time_slots:
-                    cursor.execute('INSERT INTO availability (service, date, time) VALUES (?, ?, ?)',
-                                   (jewelry_service, date.strip(), time.strip()))
         else:
             cursor.execute('DELETE FROM availability WHERE service = ? AND date = ?', (service, date.strip()))
             for time in time_slots:
@@ -162,6 +155,15 @@ def remove_slots_from_other_services_endpoint():
     slots = data['slots']
     remove_slots_from_other_services(service, date, slots)
     return jsonify(success=True)
+
+@app.route('/get-all-services')
+def get_all_services():
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute('SELECT subcategory FROM services')
+    services = cursor.fetchall()
+    conn.close()
+    return jsonify([service['subcategory'] for service in services])
 
 def generate_time_slots(start_time, end_time):
     start = datetime.strptime(start_time, '%I:%M %p')
