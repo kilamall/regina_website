@@ -201,25 +201,25 @@
     <main>
         <section class="content">
             <h2>Book a Service</h2>
-            <div class="button-container hidden" id="add-more-services-container">
-                <button type="button" onclick="addMoreServices()">Add More Services</button>
-            </div>
-            <form id="bookingForm" action="{{ url_for('booking') }}" method="post" oninput="checkInputs()" onsubmit="return validateForm()">
-                <div id="category-list" class="center-content">
-                    <!-- Categories will be dynamically inserted here -->
-                </div>
-
-                <div id="service-list" class="center-content" style="display: none;">
-                    <button type="button" onclick="addMoreServices()" class="back-button">Back</button>
-                    <!-- Services will be dynamically inserted here -->
-                </div>
-
-                <div id="date-picker" style="display: none;">
-                    <button type="button" onclick="goBack()" class="back-button">Back</button>
+            <form id="bookingForm" action="{{ url_for('booking') }}" method="post" onsubmit="return validateForm()">
+                
+                <!-- Date Picker: First step, required before showing categories -->
+                <div id="date-picker">
                     <label for="date">Select a Date:</label>
                     <input type="text" id="date" name="date" placeholder="Select a date" required>
                 </div>
+                
+                <!-- Category List: Hidden until date is selected -->
+                <div id="category-list" class="center-content" style="display: none;">
+                    <!-- Categories will be dynamically inserted here -->
+                </div>
 
+                <!-- Service List: Hidden until category is selected -->
+                <div id="service-list" class="center-content" style="display: none;">
+                    <!-- Services will be dynamically inserted here -->
+                </div>
+
+                <!-- Available Times: Hidden until services are added -->
                 <div id="available-times" class="center-content" style="display: none;">
                     <label for="time">Available Times:</label>
                     <div id="time-widgets" class="time-widgets">
@@ -228,6 +228,7 @@
                     <input type="hidden" id="time" name="time" required>
                 </div>
 
+                <!-- Personal Info: Hidden until date and service are selected -->
                 <div id="text-inputs" style="display: none;">
                     <label for="name">Name:</label>
                     <input type="text" id="name" name="name" required>
