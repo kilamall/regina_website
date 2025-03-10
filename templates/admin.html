@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Bueno Beauty Bar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <style>
+        .confirmation-message {
+            display: none;
+            color: green;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .consultation-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ff69b4;
+            color: white;
+            font-weight: 700;
+            text-decoration: none;
+            border-radius: 5px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            transition: background-color 0.3s;
+        }
+        .consultation-button:hover {
+            background-color: #ffb6c1;
+        }
+        header {
+            position: relative;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Bueno Beauty Bar - Admin</h1>
+        </div>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Testimonials & Gallery</a></li>
+                <li><a href="{{ url_for('booking') }}">Booking</a></li>
+            </ul>
+            <a href="{{ url_for('booking') }}" class="consultation-button">Consultation</a>
+            <div class="hamburger" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <h2>Set Availability</h2>
+            <form id="availabilityForm" action="{{ url_for('admin') }}" method="post">
+                <label for="service">Service:</label>
+                <select id="service" name="service">
+                    <option value="All Services">All Services</option>
+                    <option value="Permanent Jewelry">Permanent Jewelry</option>
+                    {% for service in services %}
+                        <option value="{{ service }}">{{ service }}</option>
+                    {% endfor %}
+                </select>
+
+                <label for="date-admin">Date:</label>
+                <input type="date" id="date-admin" name="date" placeholder="Select a date" required>
+
+                <label for="start-time">Start Time:</label>
+                <input type="text" id="start-time" name="start_time" placeholder="Select start time" class="time-picker" required>
+
+                <label for="end-time">End Time:</label>
+                <input type="text" id="end-time" name="end_time" placeholder="Select end time" class="time-picker" required>
+
+                <button type="submit">Set Availability</button>
+            </form>
+            <div id="confirmationMessage" class="confirmation-message">
+                Changes have been saved successfully!
+            </div>
+        </section>
+        <section class="content">
+            <h2>Daily Schedule</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Client Name</th>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Contact Info</th>
+                    </tr>
+                </thead>
+                <tbody id="bookings-table">
+                    {% for booking in bookings %}
+                        <tr>
+                            <td>{{ booking.name }}</td>
+                            <td>{{ booking.service }}</td>
+                            <td>{{ booking.date }}</td>
+                            <td>{{ booking.time }}</td>
+                            <td>{{ booking.contact_info }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Bueno Beauty Bar | Contact us at (650) 766-3918</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

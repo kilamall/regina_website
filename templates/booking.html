@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking - Bueno Beauty Bar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pikaday/css/pikaday.css">
+    <style>
+        .service-item {
+            display: inline-block;
+            padding: 15px;
+            margin: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            flex: 1 1 30%; /* Adjust flex basis to control the number of items per row */
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        .service-item:hover {
+            background-color: #ccc;
+        }
+
+        .back-button {
+            display: block;
+            margin: 10px 0;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .back-button:hover {
+            background-color: #ccc;
+        }
+
+        .center-content {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .time-widget {
+            display: inline-block;
+            padding: 10px;
+            margin: 5px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .time-widget:hover {
+            background-color: #ccc;
+        }
+
+        .time-widget.selected {
+            background-color: #ccc;
+        }
+
+        .time-widgets {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Bueno Beauty Bar</h1>
+        </div>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Testimonials & Gallery</a></li>
+                <li><a href="{{ url_for('booking') }}">Booking</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="content">
+            <h2>Book a Service</h2>
+            <form id="booking-form" action="{{ url_for('booking') }}" method="post" oninput="checkInputs()" onsubmit="return validateForm()">
+                <div id="category-list" class="center-content">
+                    <!-- Categories will be dynamically inserted here -->
+                </div>
+
+                <div id="service-list" class="center-content" style="display: none;">
+                    <button type="button" onclick="goBack()" class="back-button">Back</button>
+                    <!-- Services will be dynamically inserted here -->
+                </div>
+
+                <div id="date-picker" style="display: none;">
+                    <label for="date">Select a Date:</label>
+                    <input type="text" id="date" name="date" placeholder="Select a date" required>
+                </div>
+
+                <div id="available-times" class="center-content" style="display: none;">
+                    <label for="time">Available Times:</label>
+                    <div id="time-widgets" class="time-widgets">
+                        <!-- Time slots will be dynamically inserted here -->
+                    </div>
+                    <input type="hidden" id="time" name="time" required>
+                </div>
+
+                <div id="text-inputs" style="display: none;">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" name="name" required>
+
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email">
+
+                    <label for="phone">Phone Number:</label>
+                    <input type="tel" id="phone" name="phone" pattern="^\d{10}$">
+                    
+                    <div id="message-container">
+                        <label for="message">Message:</label>
+                        <textarea id="message" name="message"></textarea>
+                    </div>
+
+                    <input type="hidden" id="service" name="service"> <!-- Hidden input for service -->
+
+                    <button type="submit">Book Appointment</button>
+                </div>
+            </form>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Bueno Beauty Bar | Contact us at (650) 766-3918</p>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/pikaday/pikaday.js"></script>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>

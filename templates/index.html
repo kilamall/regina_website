@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bueno Beauty Bar</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Bueno Beauty Bar</h1>
+        </div>
+        <nav>
+            <ul id="nav-menu">
+                <li><a href="{{ url_for('home') }}">Home</a></li>
+                <li><a href="{{ url_for('about') }}">About Me</a></li>
+                <li><a href="{{ url_for('testimonials_gallery') }}">Testimonials & Gallery</a></li>
+                <li><a href="{{ url_for('booking') }}">Booking</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">
+                <div></div>
+                <div></div>
+                <div></div>
+            </div>
+        </nav>
+    </header>
+    <main>
+        <section class="hero">
+            <h2> Where Beauty Meets Bueno</h2>
+        </section>
+        <section class="content"> 
+            <h3>Book Now</h3>
+            <a href="{{ url_for('booking') }}" class="button">Book Now</a>
+        </section>
+        <section class="content">
+            <h3>Beauty Bar</h3>
+            <h4>Upload Your Image to Recieve Tailored Beauty Recommendations</h4>
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <label for="photo">Upload a photo:</label>
+                <input type="file" id="photo" name="photo" accept="image/*" required>
+                <button type="submit">Get Recommendations</button>
+            </form>
+        </section>
+        <section class="content">
+           
+            <h3>Future Features</h3>
+            <div id="instagram-embed">
+                <!-- Instagram embed code will go here in the future -->
+            </div>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2024 Bueno Beauty Bar | Contact us at (650) 766-3918</p>
+    </footer>
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+</body>
+</html>
