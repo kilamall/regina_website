@@ -97,8 +97,13 @@ def insert_services():
         ('Makeup', 'Tutorial', 90, 75.0),
         ('Permanent Jewelry','Necklace',30, 300.0),
         ('Permanent Jewelry','Bracelet',30, 150.0),
-        ('Permanent Jewelry','Ring',30, 80.0)
-
+        ('Permanent Jewelry','Ring',30, 80.0),
+             # Bundle options (Packages)
+        ('Bundles', 'Essential Beauty Bundle: Brow tint, Lash lift, Brow shape', 115, 95.0),
+        ('Bundles', 'Complete Glam Bundle: Brow lamination+tint+shape, Lash lift+tint, Full face wax, Event Makeup', 340, 250.0),
+        ('Bundles', 'Express Beauty Bundle: Brow tint, Lash tint, Makeup', 120, 90.0),
+        ('Bundles', 'Lash & Brow Duo: Brow tint + brow shape, Lash lift', 105, 85.0),
+        ('Bundles', 'Beauty Essentials Bundle: Brow tint, Lash lift+tint, Makeup Consultation', 165, 125.0)
     ]
 
     conn = connect_db()
